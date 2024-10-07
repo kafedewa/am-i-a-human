@@ -1,22 +1,28 @@
 import React from 'react'
+import useConversation from '../../zustand/useConversation'
 
-const Conversation = () => {
+const Conversation = ({conversation, lastIdx}) => {
+    const {selectedConversation, setSelectedConversation} = useConversation();
+    const isSelected = selectedConversation?._id === conversation._id;
+
   return (
     <>
-    <div className='flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer'>
+    <div className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer
+        ${isSelected ? "bg-sky-500" : ""}
+        `}
+        onClick={() => setSelectedConversation(conversation)}>
         <div className='avatar'>
             <div className='w-10 rounded-full'>
-                <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d6/Avatar_%282009_film%29_poster.jpg/220px-Avatar_%282009_film%29_poster.jpg" alt="user avatar"/>
+                <img src={conversation.profilePic} alt="user avatar"/>
             </div>
         </div>
         <div className='flex flex-col flex-1'>
             <div className='flex gap-3 justify-between'>
-                <p className='font-bold text-gray-200'>Kayla Fedewa</p>
-                <span className='text-xl'>❤️</span>
+                <p className='font-bold text-gray-200'>{conversation.fullName}</p>
             </div>
         </div>
     </div>
-    <div className='divider my-0 py-0 h-1'></div>
+    {!lastIdx && <div className='divider my-0 py-0 h-1'></div>}
     </>
   )
 }
