@@ -1,7 +1,11 @@
 import React from 'react'
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
+import { useAuthContext } from '../../context/AuthContext';
+
 
 const Welcome = () => {
+    const {authUser} = useAuthContext();
+
   return (
     <div className='text-black'>
         <div className='flex flex-col items-center'>
@@ -11,7 +15,9 @@ const Welcome = () => {
             <h3 className='text-lg text-center mt-4'>
                 <span>Chat with another.  Decide if they are human.</span>
             </h3>
-            <button className="btn btn-outline mt-10">Enter Here</button>
+            <Link to={authUser ? "/" : "/login"}>
+                <button className="btn btn-outline mt-10">Enter Here</button>
+            </Link>
         </div>
 
         <footer className="footer footer-center p-4 fixed inset-x-0 bottom-0">
