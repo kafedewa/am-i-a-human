@@ -4,9 +4,8 @@ import { useSocketContext } from '../../context/SocketContext';
 
 const Conversation = ({conversation, lastIdx}) => {
     const {selectedConversation, setSelectedConversation} = useConversation();
-    const isSelected = selectedConversation?._id === conversation._id;
+    const isSelected = selectedConversation?.id === conversation.id;
     const {onlineUsers} = useSocketContext();
-    const isOnline = onlineUsers.includes(conversation._id);
 
   return (
     <>
@@ -14,14 +13,14 @@ const Conversation = ({conversation, lastIdx}) => {
         ${isSelected ? "bg-sky-500" : ""}
         `}
         onClick={() => setSelectedConversation(conversation)}>
-        <div className={`avatar ${isOnline ? "online" : ""}`}>
-            <div className='w-10 rounded-full'>
-                <img src={conversation.profilePic} alt="user avatar"/>
+        <div className="avatar placeholder">
+            <div className="bg-neutral text-neutral-content w-8 rounded-full">
+                <span className="text-xs">{conversation.fullname[0]}</span>
             </div>
         </div>
         <div className='flex flex-col flex-1'>
             <div className='flex gap-3 justify-between'>
-                <p className='font-bold text-gray-200'>{conversation.fullName}</p>
+                <p className='font-bold text-gray-200'>{conversation.fullname}</p>
             </div>
         </div>
     </div>

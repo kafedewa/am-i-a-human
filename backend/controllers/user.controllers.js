@@ -1,13 +1,13 @@
-import User from "../models/user.model.js";
+import { supabase } from "../../frontend/src/supabaseClient.js";
 
 export const getUsersforSidebar = async(req,res) => {
 
     try {
         const loggedInUserId = req.user._id;
+        const { data, error } = await supabase.from('users').select();
 
-        const filteredUsers = await User.find({_id: {$ne:loggedInUserId}}).select("-password");
 
-        return res.status(200).json({filteredUsers});
+        return res.status(200).json({});
 
     } catch (error) {
         console.log("error in getUsersforSidebar: ", error.message);

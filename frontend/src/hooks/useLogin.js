@@ -1,33 +1,29 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { useAuthContext } from '../context/AuthContext';
-
+import {supabase} from '../supabaseClient'
 
 const useLogin = () => {
     const[loading, setLoading] = useState(false);
     const {authUser, setAuthUser} = useAuthContext();
 
-    const login = async (username, password) => {
-        const success = handleInputErrors(username, password);
+    const login = async (email, password) => {
+        const success = handleInputErrors(email, password);
 		if (!success) return;
 
         setLoading(true);
         try {
-            const res = await fetch("api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type" : "application/json"},
-                body: JSON.stringify({username,password})
-                
-            })
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+              })
+              
 
-            const data = await res.json();
-            if(data.error){
-                throw new Error(data.error);
+            if(error){
+                throw new Error(error.message);
             }
 
-            localStorage.setItem("chat-user", JSON.stringify(data));
-            setAuthUser(data);
+            setAuthUser(data.user.user_metadata);
         } catch (error) {
             toast.error(error.message);
         }finally{
@@ -40,8 +36,8 @@ const useLogin = () => {
 
 export default useLogin
 
-function handleInputErrors(username, password) {
-	if (!username || !password) {
+function handleInputErrors(email, password) {
+	if (!email || !password) {
 		toast.error("Please fill in all fields");
 		return false;
 	}

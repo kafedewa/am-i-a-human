@@ -4,14 +4,14 @@ import useLogin from '../../hooks/useLogin';
 
 const Login = () => {
 
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const {loading,login} = useLogin();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await login(username,password);
+        await login(email,password);
     }
 
   return (
@@ -25,9 +25,9 @@ const Login = () => {
         <form onSubmit={handleSubmit}>
             <div>
                 <label className='label p-2'>
-                    <span className='text-base label-text'>Username</span>
+                    <span className='text-base label-text'>Email</span>
                 </label>
-                <input type='text' placeholder='Enter username' value={username} onChange={(e) => setUsername(e.target.value)} className='w-full input input-bordered h-10'/>
+                <input type='text' placeholder='Enter email' value={email} onChange={(e) => setEmail(e.target.value)} className='w-full input input-bordered h-10'/>
             </div>
 
             <div>

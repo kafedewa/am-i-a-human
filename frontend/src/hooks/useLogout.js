@@ -2,27 +2,30 @@ import React from 'react'
 import { useState } from 'react'
 import { useAuthContext } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import {supabase} from '../supabaseClient'
+import useConversation from '../zustand/useConversation';
+
+
 
 const useLogout = () => {
     const [loading, setLoading] = useState(false);
 
     const {setAuthUser} = useAuthContext();
+    const {setMessages, setSelectedConversation} = useConversation();
+
 
     const logout = async () => {
         setLoading(true);
         try {
-            const res = await fetch("/api/auth/logout",{
-                method: "POST",
-                headers: {"Content-Type": "application/json"}
-            });
-            const data = await res.json();
+            const { error } = await supabase.auth.signOut()
 
-            if(data.error){
-                throw new Error(data.error);
+            if(error){
+                throw new Error(error.message);
             }
 
-            localStorage.removeItem("chat-user");
             setAuthUser(null);
+            setMessages([]);
+            setSelectedConversation(null);
         } catch (error) {
             toast.error(error.message);
         }finally{

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import GenderCheckBox from './GenderCheckBox'
 import { Link } from 'react-router-dom'
 import useSignup from '../../hooks/useSignup';
 
@@ -7,10 +6,10 @@ const SignUp = () => {
 
     const [inputs, setInputs] = useState({
         fullName: '',
+        email: '',
         username: '',
         password: '',
         confirmPassword: '',
-        gender: ''
     });
 
     const {loading, signup} = useSignup();
@@ -43,6 +42,15 @@ const SignUp = () => {
 
                 <div>
                     <label className='label p-2'>
+                        <span className='text-base label-text'>Email</span>
+                    </label>
+                    <input type='text' placeholder='jdoe@jdoe.com' className='w-full input input-bordered h-10'
+                        value={inputs.email}
+                        onChange={(e) => setInputs({...inputs, email: e.target.value})}/>
+                </div>
+
+                <div>
+                    <label className='label p-2'>
                         <span className='text-base label-text'>Username</span>
                     </label>
                     <input type='text' placeholder='Username' className='w-full input input-bordered h-10'
@@ -67,8 +75,6 @@ const SignUp = () => {
                     value={inputs.confirmPassword}
                     onChange={(e) => setInputs({...inputs, confirmPassword: e.target.value})}/>
                 </div>
-
-                <GenderCheckBox onCheckboxChange={handleCheckboxChange} selectedGender={inputs.gender}/>
 
                 <Link to='/login' className='text-sm hover:underline hover:text-blue-400 mt-1 inline-block'>
                     Already have an account?

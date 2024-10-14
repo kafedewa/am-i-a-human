@@ -6,17 +6,18 @@ import { extractTime } from '../../../../backend/utils/extractTime';
 const Message = ({message}) => {
   const {authUser} = useAuthContext();
   const {selectedConversation} = useConversation();
-  const fromMe = message.senderId === authUser._id;
-  const formattedTime = extractTime(message.createdAt);
+
+  const fromMe = message.senderId === authUser.sub;
+  const formattedTime = extractTime(message.created_at);
   const chatClassname = fromMe ? 'chat-end' : 'chat-start';
-  const profilePic = fromMe ? authUser.profilePic : selectedConversation.profilePic;
+  const picName = fromMe ? authUser.fullName : selectedConversation.fullname;
   const bubbleBgColor = fromMe ? 'bg-blue-500' : '';
 
   return (
     <div className={`chat ${chatClassname}`}>
-        <div className='chat-image avatar'>
-            <div className='w-10 rounded-full'>
-            <img src={profilePic} alt="user avatar"/>
+        <div className="chat-image avatar placeholder">
+            <div className="bg-neutral text-neutral-content w-8 rounded-full">
+                <span className="text-xs">{picName[0]}</span>
             </div>
         </div>
         <div className={`chat-bubble text-white ${bubbleBgColor}`}>{message.message} </div>
