@@ -1,11 +1,9 @@
 import React from 'react'
 import useConversation from '../../zustand/useConversation'
-import { useSocketContext } from '../../context/SocketContext';
 
 const Conversation = ({conversation, lastIdx}) => {
     const {selectedConversation, setSelectedConversation} = useConversation();
     const isSelected = selectedConversation?.id === conversation.id;
-    const {onlineUsers} = useSocketContext();
 
   return (
     <>
@@ -13,7 +11,7 @@ const Conversation = ({conversation, lastIdx}) => {
         ${isSelected ? "bg-sky-500" : ""}
         `}
         onClick={() => setSelectedConversation(conversation)}>
-        <div className="avatar placeholder">
+        <div className={`avatar placeholder`}>
             <div className="bg-neutral text-neutral-content w-8 rounded-full">
                 <span className="text-xs">{conversation.fullname[0]}</span>
             </div>

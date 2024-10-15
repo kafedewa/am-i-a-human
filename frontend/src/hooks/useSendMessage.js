@@ -3,11 +3,13 @@ import useConversation from '../zustand/useConversation'
 import toast from 'react-hot-toast';
 import {supabase} from '../supabaseClient'
 import { useAuthContext } from '../context/AuthContext';
+import { useSocketContext } from '../context/SocketContext';
 
 const useSendMessage = () => {
   const [loading,setLoading] = useState(false);
   const {messages, setMessages, selectedConversation} = useConversation();
   const {authUser} = useAuthContext();
+  const {socket} = useSocketContext();
 
   const sendMessage = async (message) => {
     setLoading(true)
@@ -36,6 +38,8 @@ const useSendMessage = () => {
         conversation = await supabase.from('conversations').update({
             messages: conversation.data[0].messages
         }).contains('participants', [authUser.sub, selectedConversation.id]).select();
+
+        socket.emit("newMessage", data[0]);
 
         if(error){
             throw new Error(error.message)

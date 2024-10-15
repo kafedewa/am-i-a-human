@@ -5,8 +5,6 @@ export const getUsersforSidebar = async(req,res) => {
     try {
         const loggedInUserId = req.user._id;
         const { data, error } = await supabase.from('users').select();
-
-
         return res.status(200).json({});
 
     } catch (error) {

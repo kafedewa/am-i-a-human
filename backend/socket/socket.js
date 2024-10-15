@@ -8,7 +8,7 @@ const server = createServer(app);
 
 const io = new Server(server, {
 	cors: {
-		origin: ["http://localhost:8000"],
+		origin: ["http://localhost:3000"],
 		methods: ["GET", "POST"],
 	},
 });
@@ -26,16 +26,14 @@ io.on('connection', (socket) => {
 
     if(userId != "undefined") userSocketMap[userId] = socket.id;
 
-    //used to send events to all connected clients
-    io.emit("getOnlineUsers", Object.keys(userSocketMap));
-
     socket.on("disconnect", ()=>{
         console.log("user disconnected", socket.id);
         delete userSocketMap[userId];
-        io.emit("getOnlineUsers", Object.keys(userSocketMap));
-    }
+    })
 
-    )
-})
+    socket.on("newMessage", (message) => {
+        io.to(userSocketMap[message.receiverId]).emit("newMessage", message);
+    });
+});
 
 export {app,io,server};
