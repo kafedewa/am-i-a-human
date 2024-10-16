@@ -13,7 +13,7 @@ const useGetMessages = () => {
     const getMessages = async () => {
         setLoading(true)
 
-        let participants = [selectedConversation.id, authUser.sub].sort();
+        let participants = [selectedConversation.id, authUser.id].sort();
 
         try {
             const {data,error} = await supabase.from('conversations').select('messages').contains('participants', participants);

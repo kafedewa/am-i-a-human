@@ -17,7 +17,7 @@ export const SocketContextProvider = ({children}) => {
         if(authUser){
             const socket = io("http://localhost:8000/",{
                 query:{
-                    userId: authUser.sub
+                    userId: authUser.id
                 },
                 timeout: 20000,
                 transports: ["websocket"],

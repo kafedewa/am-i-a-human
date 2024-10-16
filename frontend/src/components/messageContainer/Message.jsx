@@ -7,7 +7,7 @@ const Message = ({message}) => {
   const {authUser} = useAuthContext();
   const {selectedConversation} = useConversation();
 
-  const fromMe = message.senderId === authUser.sub;
+  const fromMe = message.senderId === authUser.id;
   const formattedTime = extractTime(message.created_at);
   const chatClassname = fromMe ? 'chat-end' : 'chat-start';
   const picName = fromMe ? authUser.fullName : selectedConversation.fullname;

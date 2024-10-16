@@ -31,8 +31,14 @@ const useSignup = () => {
             }
 
             //context
-            console.log(data);
-            setAuthUser(data.user.user_metadata);
+            if(data){
+                const {data:id} = await supabase.from('users').select('id').eq('auth_id', data.session.user.id);
+
+                let newAuthUser = data.session.user.user_metadata;
+                newAuthUser.id = id[0].id;
+                setAuthUser(newAuthUser);
+                setAuthUser(data.user.user_metadata);
+            }
 
         } catch (error) {
             toast.error(error.message);
@@ -40,39 +46,6 @@ const useSignup = () => {
         setLoading(false);
         }
     }
-
-    /*const signup = async({fullName, email, username, password, confirmPassword}) => {
-       const success = handleInputErrors({fullName, email, username, password, confirmPassword});
-       if(!success) return false;
-
-       setLoading(true);
-       try {
-            const res = await fetch("/api/auth/signup", {
-                method: "POST",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({fullName, username, password, confirmPassword, gender})
-            }
-            );
-
-            const data = await res.json();
-            if(data.error){
-                throw new Error(error.data);
-            }
-
-            //local storage
-            localStorage.setItem("chat-user", JSON.stringify(data));
-
-            //context
-            setAuthUser(data);
-
-
-       } catch (error) {
-            toast.error(error.message);
-       }finally{
-        setLoading(false);
-       }
-
-    }*/
 
     return {loading, signup};
 

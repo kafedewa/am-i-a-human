@@ -16,14 +16,20 @@ const useLogin = () => {
             const { data, error } = await supabase.auth.signInWithPassword({
                 email,
                 password,
-              })
-              
+              });
 
             if(error){
                 throw new Error(error.message);
             }
 
-            setAuthUser(data.user.user_metadata);
+            if(data){
+                const {data:id} = await supabase.from('users').select('id').eq('auth_id', data.session.user.id);
+
+                let newAuthUser = data.session.user.user_metadata;
+                newAuthUser.id = id[0].id;
+                setAuthUser(newAuthUser);
+                setAuthUser(data.user.user_metadata);
+            }
         } catch (error) {
             toast.error(error.message);
         }finally{

@@ -15,7 +15,7 @@ const useSendMessage = () => {
     setLoading(true)
     try {
 
-        let participants = [authUser.sub, selectedConversation.id].sort();
+        let participants = [authUser.id, selectedConversation.id].sort();
         let conversation = await supabase.from('conversations').select().contains('participants', participants);
 
         if(conversation.data.length === 0){
@@ -26,7 +26,7 @@ const useSendMessage = () => {
 
         const { data, error } = await supabase.from('messages').insert({
             receiverId: selectedConversation.id,
-            senderId: authUser.sub,
+            senderId: authUser.id,
             message
         }).select();
 
@@ -37,7 +37,7 @@ const useSendMessage = () => {
 
         conversation = await supabase.from('conversations').update({
             messages: conversation.data[0].messages
-        }).contains('participants', [authUser.sub, selectedConversation.id]).select();
+        }).contains('participants', [authUser.id, selectedConversation.id]).select();
 
         socket.emit("newMessage", data[0]);
 

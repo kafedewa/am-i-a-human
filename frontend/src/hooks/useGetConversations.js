@@ -13,7 +13,7 @@ const useGetConversations = () => {
         setLoading(true);
         try {
             const { data, error } = await supabase.from('users').select();
-            const pos = data.map(e=>e.id).indexOf(authUser.sub);
+            const pos = data.map(e=>e.id).indexOf(authUser.id);
             data.splice(pos, 1);
 
             if(error){

@@ -9,21 +9,31 @@ export const useAuthContext = () => {
 
 export const AuthContextProvider = ({children}) => {
     const [authUser, setAuthUser] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
         const getContext = async () => {
+            setLoading(true);
             try {
                 const { data, error } = await supabase.auth.getSession();
                 if(error){
+                    setLoading(false);
                     throw new Error(error.message);
                 }
                 if(data.session){
-                    setAuthUser(data.session.user.user_metadata);
+                    const {data:id} = await supabase.from('users').select('id').eq('auth_id', data.session.user.id);
+
+                    let newAuthUser = data.session.user.user_metadata;
+                    newAuthUser.id = id[0].id;
+                    setAuthUser(newAuthUser);
+                    setLoading(false);
                 }   
                 else{ 
                     setAuthUser(null);
+                    setLoading(false);
                     return null;}
             } catch (error) {
+                setLoading(false);
                 throw new Error(error.message);
             }
         }
@@ -32,7 +42,7 @@ export const AuthContextProvider = ({children}) => {
     }, [])
 
 
-    return <AuthContext.Provider value={{ authUser, setAuthUser }}>
+    return <AuthContext.Provider value={{ authUser, loading, setAuthUser }}>
         
         {children}
         
