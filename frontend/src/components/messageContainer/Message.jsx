@@ -1,14 +1,11 @@
 import React from 'react'
 import {useAuthContext} from '../../context/AuthContext'
-import {useConversationContext} from '../../context/ConversationContext'
 import { extractTime } from '../../../../backend/utils/extractTime';
 import filledIcon from '../../assets/person-square-fill-svgrepo-com.svg'
 import unfilledIcon from '../../assets/person-square-svgrepo-com.svg'
 
 const Message = ({message}) => {
   const {authUser} = useAuthContext();
-  const {conversation} = useConversationContext();
-
   const fromMe = message.senderId === authUser.id;
   const formattedTime = extractTime(message.created_at);
   const pic = fromMe ? filledIcon : unfilledIcon;

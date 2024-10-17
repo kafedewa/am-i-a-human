@@ -12,7 +12,6 @@ const Home = () => {
     const handleClick = async (e) => {
         e.preventDefault();
         await startConversation();
-        redirect('/chat');
     }
 
   return (

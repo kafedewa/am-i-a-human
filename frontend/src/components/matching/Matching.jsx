@@ -4,7 +4,7 @@ const Matching = () => {
   return (
     <div>
 
-        <div className='flex flex-col items-center text-black'>
+        <div className='flex flex-col items-center text-black pt-32'>
             <h1 className='text-6xl font-semibold'>
                 <span >Matching now...</span>
             </h1>
