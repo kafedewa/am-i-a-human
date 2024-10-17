@@ -12,9 +12,7 @@ const useGetConversations = () => {
     const getConversations = async () => {
         setLoading(true);
         try {
-            const { data, error } = await supabase.from('users').select();
-            const pos = data.map(e=>e.id).indexOf(authUser.id);
-            data.splice(pos, 1);
+            const {data,error} = await supabase.from('conversations').select().contains('participants', [authUser.id]);
 
             if(error){
                 throw new Error(error.message);
