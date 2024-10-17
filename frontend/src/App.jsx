@@ -15,7 +15,7 @@ function App() {
   return (
     <>
     {loading ? (<span className='loading loading-spinner'/>) : 
-      (<div className='p-4 h-screen flex items-center justify-center bg-white'>
+      (<div className='h-screen flex items-center justify-center bg-white'>
 
         <Routes>
           <Route path='/' element={authUser ? <Home/> : <Navigate to="/welcome"/>}/>

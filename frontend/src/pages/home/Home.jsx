@@ -2,13 +2,16 @@ import React from 'react'
 import PastChatsTable from '../../components/pastChatsTable/PastChatsTable'
 import { useAuthContext } from '../../context/AuthContext'
 import { Link } from 'react-router-dom';
+import LogoutButton from '../../components/sidebar/LogoutButton';
 
 const Home = () => {
     const {authUser} = useAuthContext();
 
   return (
     <div>
-
+        <div className="navbar navbar-end fixed bg-base-100 right-4 top-0">
+            <LogoutButton/>
+        </div>
         <div className='flex flex-col items-center'>
             <h1 className='text-6xl font-semibold text-black'>
                 <span >Welcome, {authUser.fullName}!</span>
@@ -22,7 +25,6 @@ const Home = () => {
 
             <PastChatsTable/>
         </div>
-
 
     </div>
   )
