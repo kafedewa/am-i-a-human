@@ -17,9 +17,9 @@ const Messages = () => {
   },[messages])
 
   return (
-    <div className='px-4 flex-1 overflow-auto'>
+    <div className='flex flex-col h-full w-full overflow-auto px-4 py-4 rounded-lg'>
         {!loading && messages.length > 0 && messages.map((message) => (
-          <div key={message.id} ref={lastMessageRef}>
+          <div className='w-full' key={message.id} ref={lastMessageRef}>
             <Message message={message}/>
           </div>
         ))}
@@ -27,8 +27,8 @@ const Messages = () => {
         {loading && [...Array(3)].map((_,idx) => <MessageSkeleton key={idx}/>)}
 
         {!loading && messages.length === 0 && (
-          <div className="flex flex-1 h-full overflow-auto px-4 py-4 rounded-lg">
-          <h3 className='text-5xl items-center justify-center font-semibold text-center'>
+          <div className="flex flex-1 h-full w-full items-center justify-center overflow-auto px-4 py-4 rounded-lg">
+          <h3 className='text-5xl font-semibold text-center'>
             <span>Send a message to start the conversation</span>
           </h3>
           </div>

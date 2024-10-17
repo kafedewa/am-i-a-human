@@ -1,21 +1,19 @@
 import React, { useEffect } from 'react'
 import Messages from './Messages'
 import MessageInput from './MessageInput'
-import { TiMessages } from "react-icons/ti";
-import useConversation from '../../zustand/useConversation';
-import { useAuthContext } from '../../context/AuthContext';
+import { useConversationContext } from '../../context/ConversationContext';
 
 
 const MessageContainer = () => {
-  const {selectedConversation, setSelectedConversation} = useConversation();  
-  
+  const {selectedConversation, setSelectedConversation} = useConversationContext();  
+  /*
   useEffect(() => {
     //cleanup function 
     return () => setSelectedConversation(null);
-  }, [setSelectedConversation])
+  }, [setSelectedConversation])*/
 
   return (
-    <div className='flex h-screen items-center justify-between pt-24 flex-col'>
+    <div className='flex h-screen w-full pt-24 flex-col'>
       <>
         <Messages/>
         <MessageInput/>

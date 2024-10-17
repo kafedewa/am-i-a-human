@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import useConversation from '../zustand/useConversation';
+import { useConversationContext } from '../context/ConversationContext';
 import toast from 'react-hot-toast';
 import { supabase } from '../supabaseClient';
 import { useAuthContext } from '../context/AuthContext';
+import useMessages from '../zustand/useMessages'
 
 const useGetMessages = () => {
   const [loading, setLoading] = useState(false);
-  const {messages, setMessages, selectedConversation} = useConversation();
+  const {messages, setMessages} = useMessages();
+  const {conversation} = useConversationContext();
   const {authUser} = useAuthContext();
 
   useEffect(() => {
     const getMessages = async () => {
         setLoading(true)
 
-        let participants = [selectedConversation.id, authUser.id].sort();
+        let participants = [conversation.id, authUser.id].sort();
 
         try {
             const {data,error} = await supabase.from('conversations').select('messages').contains('participants', participants);
@@ -33,8 +35,8 @@ const useGetMessages = () => {
         }
     }
 
-    if(selectedConversation?.id) getMessages()
-  },[selectedConversation?.id,setMessages])
+    if(conversation?.id) getMessages()
+  },[conversation?.id,setMessages])
   return {messages, loading}
 }
 

@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { useAuthContext } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import {supabase} from '../supabaseClient'
-import useConversation from '../zustand/useConversation';
+import useMessages from '../zustand/useMessages';
+import { useConversationContext } from '../context/ConversationContext';
 
 
 
@@ -11,7 +12,8 @@ const useLogout = () => {
     const [loading, setLoading] = useState(false);
 
     const {setAuthUser} = useAuthContext();
-    const {setMessages, setSelectedConversation} = useConversation();
+    const {setMessages} = useMessages();
+    const {setSelectedConversation} = useConversationContext();
 
 
     const logout = async () => {

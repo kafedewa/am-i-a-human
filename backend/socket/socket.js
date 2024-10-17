@@ -13,10 +13,6 @@ const io = new Server(server, {
 	},
 });
 
-export const getReceiverSocketId = (receiverId) => {
-    return userSocketMap[receiverId];
-}
-
 const userSocketMap = {}; //(userID: socketID)
 
 io.on('connection', (socket) => {
@@ -29,7 +25,12 @@ io.on('connection', (socket) => {
     socket.on("disconnect", ()=>{
         console.log("user disconnected", socket.id);
         delete userSocketMap[userId];
-    })
+    });
+
+    socket.on('startConversation', (authUserId, callback) => {
+        console.log("got startConversation", authUserId);
+        callback({'id': 'REDACTED', 'fullname': 'Test Client6'});
+    });
 
     socket.on("newMessage", (message) => {
         io.to(userSocketMap[message.receiverId]).emit("newMessage", message);

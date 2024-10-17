@@ -1,0 +1,35 @@
+import React, { useEffect } from 'react'
+import { useState } from 'react';
+import { useAuthContext } from '../context/AuthContext';
+import { useSocketContext } from '../context/SocketContext';
+import { useConversationContext } from '../context/ConversationContext';
+import { useNavigate } from 'react-router-dom';
+
+const useStartConversation = () => {
+    const [loading,setLoading] = useState(false);
+    const {conversation, setConversation} = useConversationContext();
+    const {authUser} = useAuthContext();
+    const {socket} = useSocketContext();
+    const navigate = useNavigate();
+
+    const startConversation = async () => {
+        setLoading(true);
+        try {
+            socket.emit('startConversation', authUser.id, (partner) => {
+               console.log(partner);
+                setConversation(partner);
+                console.log('selected conversation', conversation);
+            });
+            
+        } catch (error) {
+            
+        }finally{
+            setLoading(false);
+            navigate('/chat')
+        }
+    }
+
+  return {startConversation, loading}
+}
+
+export default useStartConversation

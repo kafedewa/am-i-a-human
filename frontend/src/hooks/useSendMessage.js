@@ -1,43 +1,46 @@
 import React, { useState } from 'react'
-import useConversation from '../zustand/useConversation'
 import toast from 'react-hot-toast';
 import {supabase} from '../supabaseClient'
 import { useAuthContext } from '../context/AuthContext';
 import { useSocketContext } from '../context/SocketContext';
+import useMessages from '../zustand/useMessages';
+import { useConversationContext } from '../context/ConversationContext';
 
 const useSendMessage = () => {
   const [loading,setLoading] = useState(false);
-  const {messages, setMessages, selectedConversation} = useConversation();
+  const {messages, setMessages} = useMessages();
   const {authUser} = useAuthContext();
   const {socket} = useSocketContext();
+  const {conversation} = useConversationContext();
 
   const sendMessage = async (message) => {
     setLoading(true)
     try {
+        console.log(conversation)
 
-        let participants = [authUser.id, selectedConversation.id].sort();
-        let conversation = await supabase.from('conversations').select().contains('participants', participants);
+        let participants = [authUser.id, conversation.id].sort();
+        let s_conversation = await supabase.from('conversations').select().contains('participants', participants);
 
-        if(conversation.data.length === 0){
-            conversation = await supabase.from('conversations').insert({
+        if(s_conversation.data.length === 0){
+            s_conversation = await supabase.from('conversations').insert({
                 participants: participants
             }).select();
         }
 
         const { data, error } = await supabase.from('messages').insert({
-            receiverId: selectedConversation.id,
+            receiverId: conversation.id,
             senderId: authUser.id,
             message
         }).select();
 
-        if(conversation.data[0].messages){
-            conversation.data[0].messages.push(data[0].id);
-        } else conversation.data[0].messages = [data[0].id];
+        if(s_conversation.data[0].messages){
+            s_conversation.data[0].messages.push(data[0].id);
+        } else s_conversation.data[0].messages = [data[0].id];
 
 
-        conversation = await supabase.from('conversations').update({
-            messages: conversation.data[0].messages
-        }).contains('participants', [authUser.id, selectedConversation.id]).select();
+        s_conversation = await supabase.from('conversations').update({
+            messages: s_conversation.data[0].messages
+        }).contains('participants', [authUser.id, conversation.id]).select();
 
         socket.emit("newMessage", data[0]);
 
