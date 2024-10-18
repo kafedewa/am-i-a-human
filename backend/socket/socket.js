@@ -15,6 +15,16 @@ const io = new Server(server, {
 
 const userSocketMap = {}; //(userID: socketID)
 
+const waitingUserSocketMap = {};
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+  }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 io.on('connection', (socket) => {
     console.log("A user connected", socket.id)
 
@@ -25,11 +35,25 @@ io.on('connection', (socket) => {
     socket.on("disconnect", ()=>{
         console.log("user disconnected", socket.id);
         delete userSocketMap[userId];
+        if(waitingUserSocketMap[userId]){
+            delete waitingUserSocketMap[partnerId];
+        }
     });
 
-    socket.on('startConversation', (authUserId, callback) => {
+    socket.on('startConversation', (authUserId) => {
         console.log("got startConversation", authUserId);
-        callback({'id': 'REDACTED', 'fullname': 'Test Client6'});
+
+        if (Object.keys(waitingUserSocketMap).length != 0) {
+            // Pair the two users
+            const partnerId = Object.keys(waitingUserSocketMap)[0];;
+            io.to(socket.id).emit("paired", partnerId);
+            io.to(waitingUserSocketMap[partnerId]).emit("paired", authUserId);
+            delete waitingUserSocketMap[partnerId]; // Reset waiting user
+          } else {
+            // Set the current user as waiting
+            waitingUserSocketMap[authUserId] = socket.id;
+          }
+
     });
 
     socket.on("newMessage", (message) => {

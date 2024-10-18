@@ -9,7 +9,7 @@ const Matching = () => {
                 <span >Matching now...</span>
             </h1>
             <h3 className='text-lg text-center mt-4'>
-                <span>This may take up to 5 minutes.</span>
+                <span>This may take a bit.</span>
             </h3>
             <span className="loading loading-spinner mt-10 loading-lg"></span>
 

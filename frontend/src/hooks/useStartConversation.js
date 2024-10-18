@@ -15,11 +15,12 @@ const useStartConversation = () => {
     const startConversation = async () => {
         setLoading(true);
         try {
-            socket.emit('startConversation', authUser.id, (partner) => {
-               console.log(partner);
-                setConversation(partner);
-                console.log('selected conversation', conversation);
-            });
+            socket.emit('startConversation', authUser.id);
+
+            socket.on("paired", (partner) => {
+                setConversation({id : partner});
+                console.log(`Paired with ${partner}`);
+              });
             
         } catch (error) {
             
