@@ -7,13 +7,13 @@ import useMessages from '../zustand/useMessages'
 const useListenMessages = () => {
     const {socket} = useSocketContext();
     const {messages, setMessages} = useMessages();
-    const {selectedConversation} = useConversationContext();
+    const {conversation} = useConversationContext();
 
     useEffect(() => {
         socket?.on("newMessage", (newMessage) => {
             const sound = new Audio(notificationSound);
             sound.play();
-            if(newMessage.senderId === selectedConversation.id){
+            if(newMessage.senderId === conversation.id){
                 setMessages([...messages,newMessage]);
             }
         })

@@ -18,8 +18,8 @@ const useStartConversation = () => {
             socket.emit('startConversation', authUser.id);
 
             socket.on("paired", (partner) => {
-                setConversation({id : partner});
-                console.log(`Paired with ${partner}`);
+                setConversation(partner);
+                console.log(`Paired with ${partner.id}`);
               });
             
         } catch (error) {

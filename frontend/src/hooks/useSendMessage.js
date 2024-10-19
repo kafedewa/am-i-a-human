@@ -40,7 +40,7 @@ const useSendMessage = () => {
 
         s_conversation = await supabase.from('conversations').update({
             messages: s_conversation.data[0].messages
-        }).contains('participants', [authUser.id, conversation.id]).select();
+        }).contains('participants', participants).select();
 
         socket.emit("newMessage", data[0]);
 

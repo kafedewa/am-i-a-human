@@ -1,7 +1,7 @@
 import {Server} from 'socket.io'
 import { createServer } from 'node:http';
 import express from 'express'
-
+import sendBotMessage from '../chatbot/chatbot.js'
 
 const app = express();
 const server = createServer(app);
@@ -36,18 +36,26 @@ io.on('connection', (socket) => {
         console.log("user disconnected", socket.id);
         delete userSocketMap[userId];
         if(waitingUserSocketMap[userId]){
-            delete waitingUserSocketMap[partnerId];
+            delete waitingUserSocketMap[userId];
         }
     });
 
     socket.on('startConversation', (authUserId) => {
         console.log("got startConversation", authUserId);
+        const num = 2; // getRandomInt(3);
+        console.log(num);
 
-        if (Object.keys(waitingUserSocketMap).length != 0) {
+        if(num === 2){
+            const delay = getRandomInt(10);
+            setTimeout(() => {
+                io.to(socket.id).emit("paired", {id: "6d9e71b3-7f1b-4b11-9807-48f4cc09de25", userType: "bot"});
+            }, 1000*delay);
+        }
+        else if (Object.keys(waitingUserSocketMap).length != 0) {
             // Pair the two users
             const partnerId = Object.keys(waitingUserSocketMap)[0];;
-            io.to(socket.id).emit("paired", partnerId);
-            io.to(waitingUserSocketMap[partnerId]).emit("paired", authUserId);
+            io.to(socket.id).emit("paired", {id: partnerId, userType: "person"});
+            io.to(waitingUserSocketMap[partnerId]).emit("paired", {id: authUserId, userType: "person"});
             delete waitingUserSocketMap[partnerId]; // Reset waiting user
           } else {
             // Set the current user as waiting
@@ -57,7 +65,11 @@ io.on('connection', (socket) => {
     });
 
     socket.on("newMessage", (message) => {
-        io.to(userSocketMap[message.receiverId]).emit("newMessage", message);
+        if(message.receiverId === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25"){
+            sendBotMessage(message, userSocketMap[message.senderId]);
+        }else{
+            io.to(userSocketMap[message.receiverId]).emit("newMessage", message);
+        }
     });
 });
 
