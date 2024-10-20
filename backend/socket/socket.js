@@ -2,6 +2,7 @@ import {Server} from 'socket.io'
 import { createServer } from 'node:http';
 import express from 'express'
 import sendBotMessage from '../chatbot/chatbot.js'
+import getRandomInt from '../utils/getRandomInt.js'
 
 const app = express();
 const server = createServer(app);
@@ -16,10 +17,6 @@ const io = new Server(server, {
 const userSocketMap = {}; //(userID: socketID)
 
 const waitingUserSocketMap = {};
-
-function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
