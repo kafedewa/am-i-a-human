@@ -11,10 +11,11 @@ const useListenMessages = () => {
 
     useEffect(() => {
         socket?.on("newMessage", (newMessage) => {
-            const sound = new Audio(notificationSound);
-            sound.play();
+            console.log("in listent messages", newMessage)
+            setMessages([...messages,newMessage]);
             if(newMessage.senderId === conversation.id){
-                setMessages([...messages,newMessage]);
+                const sound = new Audio(notificationSound);
+                sound.play();
             }
         })
         return () => socket?.off("newMessage");

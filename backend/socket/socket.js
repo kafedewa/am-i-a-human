@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import express from 'express'
 import sendBotMessage from '../chatbot/chatbot.js'
 import getRandomInt from '../utils/getRandomInt.js'
+import { sendToSupabase } from '../supabaseServer/supabaseServer.js';
 
 const app = express();
 const server = createServer(app);
@@ -38,9 +39,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('startConversation', (authUserId) => {
-        console.log("got startConversation", authUserId);
         const num = 2; // getRandomInt(3);
-        console.log(num);
 
         if(num === 2){
             const delay = getRandomInt(10);
@@ -53,7 +52,7 @@ io.on('connection', (socket) => {
             const partnerId = Object.keys(waitingUserSocketMap)[0];;
             io.to(socket.id).emit("paired", {id: partnerId, userType: "person"});
             io.to(waitingUserSocketMap[partnerId]).emit("paired", {id: authUserId, userType: "person"});
-            delete waitingUserSocketMap[partnerId]; // Reset waiting user
+            delete waitingUserSocketMap[partnerId]; 
           } else {
             // Set the current user as waiting
             waitingUserSocketMap[authUserId] = socket.id;
@@ -62,11 +61,14 @@ io.on('connection', (socket) => {
     });
 
     socket.on("newMessage", (message) => {
-        if(message.receiverId === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25"){
-            sendBotMessage(message, userSocketMap[message.senderId]);
-        }else{
-            io.to(userSocketMap[message.receiverId]).emit("newMessage", message);
-        }
+        sendToSupabase(message.senderId, message.receiverId, message.message, (messageEntry) => {
+            io.to(userSocketMap[message.senderId]).emit("newMessage", messageEntry);
+            if(message.receiverId === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25"){
+                sendBotMessage(message, userSocketMap[message.senderId]);
+            }else{
+                io.to(userSocketMap[message.receiverId]).emit("newMessage", messageEntry);
+            }
+        });
     });
 });
 
