@@ -2,7 +2,7 @@ import React from 'react'
 import PastChatsTable from '../../components/pastChatsTable/PastChatsTable'
 import { useAuthContext } from '../../context/AuthContext'
 import { Link, redirect } from 'react-router-dom';
-import LogoutButton from '../../components/sidebar/LogoutButton';
+import LogoutButton from '../../components/buttons/LogoutButton';
 import useStartConversation from '../../hooks/useStartConversation';
 
 const Home = () => {
@@ -16,7 +16,7 @@ const Home = () => {
 
   return (
     <div>
-        <div className="navbar navbar-end fixed bg-base-100 right-4 top-0">
+        <div className="navbar navbar-end fixed bg-base-100 right-4 top-1">
             <LogoutButton/>
         </div>
         <div className='flex flex-col items-center'>

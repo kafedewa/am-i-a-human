@@ -1,5 +1,5 @@
 import React from 'react'
-import {BiLogOut} from 'react-icons/bi'
+import icon from '../../assets/logout-svgrepo-com.svg'
 import useLogout from '../../hooks/useLogout'
 
 const LogoutButton = () => {
@@ -10,7 +10,7 @@ const LogoutButton = () => {
     <div className=''>
 
       {
-        !loading ? (<BiLogOut className='w-6 h-6 text-black cursor-pointer' onClick={logout}/>) : (<span className='loading loading-spinner'/>)
+        !loading ? (<button className='w-6 h-6 text-black cursor-pointer' onClick={logout}><img src={icon}/></button>) : (<span className='loading loading-spinner'/>)
       }
         
     </div>

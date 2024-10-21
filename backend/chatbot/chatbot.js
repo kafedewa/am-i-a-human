@@ -11,8 +11,6 @@ const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 const sendBotMessage = async (message, socketID) => {
 
     const conversationMessages = await getMessages(message);
-
-    console.log(conversationMessages);
     
     let formattedMessages = [{ role: "system", content: "You are another random person someone is talking to for the first time. Please use incorrect grammar, misspellings and slang when appropriate.  Also, do not ask a question in every message and keep message length varied between short and long messages." }];
 
@@ -27,8 +25,6 @@ const sendBotMessage = async (message, socketID) => {
         model: "gpt-4o-mini",
         messages: formattedMessages
     });
-    
-    console.log(completion.choices[0].message);
 
     const finalMessage = await sendToSupabase(message.receiverId, message.senderId, completion.choices[0].message.content);
 
