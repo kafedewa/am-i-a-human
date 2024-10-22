@@ -11,11 +11,12 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const sendToSupabase = async (senderId, receiverId, messageContent, callback) => {
     try {
         let participants = [senderId, receiverId];
-        let s_conversation = await supabase.from('conversations').select().contains('participants', participants);
+        let s_conversation = await supabase.from('conversations').select().contains('participants', participants).eq('isActive', 'TRUE');
 
         if(s_conversation.data.length === 0){
             s_conversation = await supabase.from('conversations').insert({
-                participants: participants
+                participants: participants,
+                isActive: "TRUE"
             }).select();
         }
 
@@ -32,7 +33,7 @@ export const sendToSupabase = async (senderId, receiverId, messageContent, callb
 
         s_conversation = await supabase.from('conversations').update({
             messages: s_conversation.data[0].messages
-        }).contains('participants', participants).select();
+        }).contains('participants', participants).eq('isActive', 'TRUE').select();
 
         if(error){
             throw new Error(error.message)
@@ -51,7 +52,7 @@ export const sendToSupabase = async (senderId, receiverId, messageContent, callb
 export const getMessages = async (message) => {
 
     try {
-        const {data,error} = await supabase.from('conversations').select('messages').contains('participants', [message.receiverId, message.senderId]);
+        const {data,error} = await supabase.from('conversations').select('messages').contains('participants', [message.receiverId, message.senderId]).eq('isActive', 'TRUE');
         if(error) throw new Error(error.message);
 
         if(data.length > 0){

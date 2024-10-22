@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {BsSend} from 'react-icons/bs'
 import useSendMessage from '../../hooks/useSendMessage';
 
-const MessageInput = () => {
+const MessageInput = ({disabled}) => {
   const [message, setMessage] = useState("");
   const {loading, sendMessage} = useSendMessage();
 
@@ -19,9 +19,10 @@ const MessageInput = () => {
             <input type="text" 
                 className='border text-sm rounded-lg block w-full pr-10 p-2.5 text-black'
                 placeholder='Send a message'
+                disabled={disabled}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}/>
-            <button type='submit' className='absolute inset-y-0 end-0 right-0 pr-3 flex items-center pe-3'>
+            <button type='submit' disabled={disabled} className='absolute inset-y-0 end-0 right-0 pr-3 flex items-center pe-3'>
               {
                          !loading ? (<BsSend/>) : (<span className='loading loading-spinner'/>)
                      }

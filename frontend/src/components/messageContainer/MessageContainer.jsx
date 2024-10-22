@@ -1,22 +1,22 @@
 import React, { useEffect } from 'react'
 import Messages from './Messages'
 import MessageInput from './MessageInput'
-import { useConversationContext } from '../../context/ConversationContext';
+import useMessages from '../../zustand/useMessages'
+import useEndConversation from '../../hooks/useEndConversation'
+import VotingContainer from '../voting/VotingContainer'
 
 
 const MessageContainer = () => {
-  const {selectedConversation, setSelectedConversation} = useConversationContext();  
-  /*
-  useEffect(() => {
-    //cleanup function 
-    return () => setSelectedConversation(null);
-  }, [setSelectedConversation])*/
+  const {isComplete} = useMessages();
+
+  useEndConversation();
 
   return (
     <div className='flex h-screen w-full pt-24 flex-col'>
       <>
+      {isComplete ? (<VotingContainer/>) : ""}
         <Messages/>
-        <MessageInput/>
+        <MessageInput disabled={isComplete}/>
       </>
     </div>
   )

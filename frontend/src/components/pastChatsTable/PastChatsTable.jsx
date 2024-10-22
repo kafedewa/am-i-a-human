@@ -3,18 +3,17 @@ import useGetConversations from '../../hooks/useGetConversations';
 import TableRow from './TableRow';
 
 const PastChatsTable = () => {
-  //TODO update with chat data
   const {loading, conversations} = useGetConversations();
 
   return (
     <div>
       {conversations.length > 0 ? (
-        <div>
+        <div className='flex-col overflow-scroll'>
         <h1 className='text-4xl mt-10 text-center font-semibold text-black'>
           <span >Past Votes</span>
         </h1>
 
-        <div className="overflow-x-auto mt-4">
+        <div className="mt-4 max-h-80 overflow-y-scroll">
         <table className="table">
           <thead>
             <tr>

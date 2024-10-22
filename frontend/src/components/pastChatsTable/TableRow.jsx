@@ -11,7 +11,7 @@ const TableRow = ({conversation,idx}) => {
         <th>{idx + 1}</th>
         <td>{formattedDate}</td>
         <td>{conversation.completed ? "Complete" : "Incomplete"}</td>
-        <td>{conversation.vote ? conversation[authUser.id] : ""}</td>
+        <td>{conversation.votes ? conversation.votes[authUser.id] : ""}</td>
         <td>{conversation.isHuman ? "Human" : "Bot"}</td>
     </tr>
   )

@@ -4,10 +4,12 @@ import { useAuthContext } from '../context/AuthContext';
 import { useSocketContext } from '../context/SocketContext';
 import { useConversationContext } from '../context/ConversationContext';
 import { useNavigate } from 'react-router-dom';
+import useMessages from '../zustand/useMessages';
 
 const useStartConversation = () => {
     const [loading,setLoading] = useState(false);
-    const {conversation, setConversation} = useConversationContext();
+    const {setConversation} = useConversationContext();
+    const {setIsComplete} = useMessages();
     const {authUser} = useAuthContext();
     const {socket} = useSocketContext();
     const navigate = useNavigate();
@@ -19,6 +21,7 @@ const useStartConversation = () => {
 
             socket.on("paired", (partner) => {
                 setConversation(partner);
+                setIsComplete(false);
                 console.log(`Paired with ${partner.id}`);
               });
             
