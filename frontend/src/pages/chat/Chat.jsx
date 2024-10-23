@@ -14,8 +14,8 @@ const Chat = () => {
 
   return (
   <div className="flex flex-col h-screen w-screen">
-    <div className="navbar flex fixed top-0 left-0 right-0 bg-base-100 z-10">
-      <h1 className="text-8xl flex-1 top-0 justify-center">Chat</h1>
+    <div className="navbar flex fixed top-0 left-0 right-0">
+      <h1 className="text-5xl font-semibold text-black flex-1 top-0 justify-center">Chat</h1>
       <div className="fixed top-6 right-6">
         <LogoutButton />
       </div>
@@ -33,7 +33,11 @@ const Chat = () => {
           </div>
         </div>)
       :
-       (<Matching/>) 
+      (<div className="flex flex-col">
+        <div className="flex-1 rounded-lg">
+          <Matching />
+        </div>
+      </div>)
     }
     
   </div>)

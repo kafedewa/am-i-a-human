@@ -7,9 +7,9 @@ const PastChatsTable = () => {
 
   return (
     <div>
-      {conversations.length > 0 ? (
+      {conversations.length > 0 ? (loading ? (<div></div>) : (
         <div className='flex-col overflow-scroll'>
-        <h1 className='text-4xl mt-10 text-center font-semibold text-black'>
+        <h1 className='text-3xl mt-10 text-center font-semibold text-black'>
           <span >Past Votes</span>
         </h1>
 
@@ -38,7 +38,8 @@ const PastChatsTable = () => {
         </table>
       </div>
       </div>
-      ) : (<div></div>)}
+      ))
+      : (<div></div>)}
     </div>
   )
 }

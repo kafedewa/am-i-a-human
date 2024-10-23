@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const VotingContainer = () => {
   const [vote, setVote] = useState("Human");
   const [submitted, setSubmitted] = useState(false);
-  const {conversation} = useConversationContext();
+  const {conversation, setConversation} = useConversationContext();
   const {submitVote} = useVote();
 
   const handleSubmit = async (e) => {
@@ -32,7 +32,7 @@ const VotingContainer = () => {
                   <span>Reality: {conversation.id === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25" ?  "Bot" : "Human"}</span>
           </h1>
           <Link to='/'>
-            <button className="btn btn-block btn-sm mt-4 btn-outline" >Return Home</button>
+            <button className="btn btn-block btn-sm mt-4 btn-outline">Return Home</button>
           </Link>
         </div>
       </>) 

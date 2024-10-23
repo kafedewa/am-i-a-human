@@ -11,6 +11,10 @@ const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 const sendBotMessage = async (message, socketID) => {
 
     const conversationMessages = await getMessages(message);
+
+    if(conversationMessages.length >= 20){
+        return;
+    }
     
     let formattedMessages = [{ role: "system", content: "You are another random person someone is talking to for the first time. Please use incorrect grammar, misspellings and slang when appropriate.  Also, do not ask a question in every message and keep message length varied between short and long messages." }];
 
