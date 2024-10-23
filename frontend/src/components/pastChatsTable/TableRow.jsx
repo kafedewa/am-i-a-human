@@ -4,7 +4,7 @@ import { extractDate } from '../../../../backend/utils/extractTime';
 
 const TableRow = ({conversation,idx}) => {
   const {authUser} = useAuthContext();
-  const formattedDate = extractDate(Date(conversation.created_at));
+  const formattedDate = extractDate(conversation.created_at);
 
   return (
     <tr>

@@ -9,7 +9,10 @@ export function extractTime(dateString) {
 }
 
 export function extractDate(dateString){
-	return moment(dateString).format("MMM Do YY");
+	const date = new Date(dateString);
+	const formattedDate = date.toLocaleDateString(); // "10/24/2022
+
+	return formattedDate
 }
 
 // Helper function to pad single-digit numbers with a leading zero

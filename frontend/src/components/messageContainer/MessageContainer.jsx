@@ -4,6 +4,7 @@ import MessageInput from './MessageInput'
 import useMessages from '../../zustand/useMessages'
 import useEndConversation from '../../hooks/useEndConversation'
 import VotingContainer from '../voting/VotingContainer'
+import MessageCounter from './MessageCounter'
 
 
 const MessageContainer = () => {
@@ -14,7 +15,8 @@ const MessageContainer = () => {
   return (
     <div className='flex h-screen w-full pt-24 flex-col'>
       <>
-      {isComplete ? (<VotingContainer/>) : ""}
+      <MessageCounter/>
+      {isComplete ? (<VotingContainer/>) : ('')}
         <Messages/>
         <MessageInput disabled={isComplete}/>
       </>
