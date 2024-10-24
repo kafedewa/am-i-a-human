@@ -10,7 +10,7 @@ const server = createServer(app);
 
 const io = new Server(server, {
 	cors: {
-		origin: ["http://localhost:3000"],
+		origin: ["https://am-i-a-human.onrender.com"],
 		methods: ["GET", "POST"],
 	},
 });
