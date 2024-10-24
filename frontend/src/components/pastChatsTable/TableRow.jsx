@@ -6,9 +6,10 @@ const TableRow = ({conversation,idx}) => {
   const {authUser} = useAuthContext();
   const formattedDate = extractDate(conversation.created_at);
 
+  console.log(idx);
+
   return (
     <tr className='text-black'>
-        <th>{idx + 1}</th>
         <td>{formattedDate}</td>
         <td>{conversation.completed ? "Complete" : "Incomplete"}</td>
         <td>{conversation.votes ? conversation.votes[authUser.id] : ""}</td>

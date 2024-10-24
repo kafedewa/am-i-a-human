@@ -6,7 +6,7 @@ import useMessages from '../zustand/useMessages';
 
 const useVote = () => {
     const {authUser} = useAuthContext();
-    const {convId} = useMessages();
+    const {convId, setConvId} = useMessages();
 
     const submitVote = async (vote) => {
         try {

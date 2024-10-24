@@ -19,15 +19,17 @@ const Home = () => {
     }
 
   return (
-    <div>
-        <div className="navbar navbar-end fixed bg-base-100 right-4 top-1">
-            <LogoutButton/>
-        </div>
-        <div className='flex flex-col items-center'>
-            <h1 className='text-5xl font-semibold text-black'>
-                <span >Welcome, {authUser.fullName}!</span>
+    <div className="flex flex-col items-center h-screen w-screen">
+        <div className="navbar flex w-screen top-0 left-0 right-0">
+            <div className="fixed top-6 right-6">
+                <LogoutButton />
+            </div>
+      </div>
+        <div className='flex flex-col w-screen h-screen overflow-auto items-center justify-center'>
+            <h1 className='flex text-center text-5xl font-semibold text-black'>
+                <span>Welcome, {authUser.fullName}!</span>
             </h1>
-            <h3 className='text-lg text-center text-black mt-4'>
+            <h3 className='flex text-lg text-center text-black mt-4'>
                 <span>Click below to chat with another. In 20 messages, your chat will be over and you'll need to decide “Was that a person or a bot?”</span>
             </h3>
             {conversation && !isComplete ? (
