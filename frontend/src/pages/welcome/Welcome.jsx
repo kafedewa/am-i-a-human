@@ -13,7 +13,7 @@ const Welcome = () => {
                 <span >Am I a Human?</span>
             </h1>
             <h3 className='text-lg text-center mt-4'>
-                <span>Chat with another.  Decide if they are human.</span>
+                <span>Chat with another.  Decide if they are a human or a chatbot.</span>
             </h3>
             <Link to={authUser ? "/" : "/login"}>
                 <button className="btn btn-outline mt-10">Enter Here</button>

@@ -28,14 +28,16 @@ const useVote = () => {
 
             console.log(newVotes);
 
-            const {error2} = await supabase.from('conversations').update({votes: newVotes}).eq('id', convId);
+            const {result} = await supabase.from('conversations').update({votes: newVotes}).eq('id', convId).select();
 
-            if(error2){
+            if(result.error){
                 throw new Error(error2);
             }
 
         } catch (error) {
             console.log(error.message);
+        } finally{
+            setConvId(null);
         }
     }
 

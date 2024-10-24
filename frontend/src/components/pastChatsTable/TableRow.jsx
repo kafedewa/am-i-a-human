@@ -7,7 +7,7 @@ const TableRow = ({conversation,idx}) => {
   const formattedDate = extractDate(conversation.created_at);
 
   return (
-    <tr>
+    <tr className='text-black'>
         <th>{idx + 1}</th>
         <td>{formattedDate}</td>
         <td>{conversation.completed ? "Complete" : "Incomplete"}</td>

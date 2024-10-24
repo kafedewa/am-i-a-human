@@ -26,7 +26,7 @@ const Messages = () => {
 
         {!loading && messages.length === 0 && (
           <div className="flex flex-1 h-full w-full items-center justify-center overflow-auto px-4 py-4 rounded-lg">
-          <h3 className='text-5xl font-semibold  text-black text-center'>
+          <h3 className='text-3xl font-semibold  text-black text-center'>
             <span>Send a message to start the conversation</span>
           </h3>
           </div>

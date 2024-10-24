@@ -11,12 +11,14 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const sendToSupabase = async (senderId, receiverId, messageContent, callback) => {
     try {
         let participants = [senderId, receiverId];
+        const isHuman = !(senderId === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25" || receiverId === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25");
         let s_conversation = await supabase.from('conversations').select().contains('participants', participants).eq('isActive', 'TRUE');
 
         if(s_conversation.data.length === 0){
             s_conversation = await supabase.from('conversations').insert({
                 participants: participants,
-                isActive: "TRUE"
+                isActive: "TRUE",
+                isHuman
             }).select();
         }
 
@@ -39,7 +41,7 @@ export const sendToSupabase = async (senderId, receiverId, messageContent, callb
             throw new Error(error.message)
         }
         if(callback){
-            callback(data[0]);
+            callback(data[0], s_conversation.data[0].id);
         }
 
         return data[0];

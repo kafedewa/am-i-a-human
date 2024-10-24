@@ -3,11 +3,13 @@ import useMessages from '../zustand/useMessages'
 import { useConversationContext } from '../context/ConversationContext';
 import { supabase } from '../supabaseClient';
 import { useAuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const useEndConversation = () => {
-    const {setConvId, isComplete} = useMessages();
-    const {conversation} = useConversationContext();
+    const {isComplete} = useMessages();
+    const {conversation, setConversation} = useConversationContext();
     const {authUser} = useAuthContext();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const endConversation = async () => {
@@ -21,8 +23,6 @@ const useEndConversation = () => {
                         .contains('participants', [conversation.id, authUser.id])
                         .eq('isActive', 'TRUE')
                         .select();
-
-                    setConvId(data[0].id);
 
                     if(error){
                         throw new Error(error);

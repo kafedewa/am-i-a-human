@@ -13,7 +13,7 @@ const useLogout = () => {
 
     const {setAuthUser} = useAuthContext();
     const {setMessages} = useMessages();
-    const {setSelectedConversation} = useConversationContext();
+    const {setConversation} = useConversationContext();
 
 
     const logout = async () => {
@@ -27,7 +27,7 @@ const useLogout = () => {
 
             setAuthUser(null);
             setMessages([]);
-            setSelectedConversation(null);
+            setConversation(null);
         } catch (error) {
             toast.error(error.message);
         }finally{

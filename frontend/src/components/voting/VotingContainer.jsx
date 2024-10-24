@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import useVote from '../../hooks/useVote';
 import { useConversationContext } from '../../context/ConversationContext';
 import { Link } from 'react-router-dom';
@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 const VotingContainer = () => {
   const [vote, setVote] = useState("Human");
   const [submitted, setSubmitted] = useState(false);
-  const {conversation, setConversation} = useConversationContext();
-  const {submitVote} = useVote();
+  const { conversation, setConversation } = useConversationContext();
+  const { submitVote } = useVote();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,49 +17,55 @@ const VotingContainer = () => {
   }
 
   const handleCheckboxChange = (vote) => {
-		setVote(vote);
-	};
+    setVote(vote);
+  };
 
   return (
     <div className='flex pt-12 items-center justify-center w-full'>
-
       {submitted ?
-      
-      (<>
-        <div className="w-fit">
-          <h1 className='text-5xl font-semibold text-center'>
-                  <span>Your Vote: {vote}<br/></span>
-                  <span>Reality: {conversation.id === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25" ?  "Bot" : "Human"}</span>
-          </h1>
-          <Link to='/'>
-            <button className="btn btn-block btn-sm mt-4 btn-outline">Return Home</button>
-          </Link>
-        </div>
-      </>) 
-      
-      : 
-      
-      (<form onSubmit={handleSubmit}>
-      <div className='w-fit items-center'>
-        <h1 className='text-5xl font-semibold text-center'>
-                <span >Time to decide</span>
-            </h1>
 
-        <label className={`label cursor-pointer ${vote === "Human" ? "selected" : ""}`}>
-            <span className='label-text'>Human</span>
-            <input type="radio" name="human" className="radio" checked={vote === "Human"} onChange={() => handleCheckboxChange("Human")} />
-        </label>
-        <label className={`label cursor-pointer ${vote === "Bot" ? "selected" : ""}`}>
-            <span className='label-text'>Bot</span>
-            <input type="radio" name="bot" checked={vote === "Bot"} onChange={() => handleCheckboxChange("Bot")}  className="radio" />
-        </label>
+        (<>
+          <div className="card bg-primary text-primary-content w-96">
+            <div className="card-body">
+              <h2 className="text-3xl card-title justify-center"><span >Results</span></h2>
+              <h1 className='text-lg text-center'>
+                <span>Your Vote: {vote}<br /></span>
+                <span>Reality: {conversation.id === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25" ? "Bot" : "Human"}</span>
+              </h1>
+              <div className="card-actions justify-center">
+                <Link className="w-full" to='/'>
+                  <button className="mt-4 btn w-full">Return Home</button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </>)
 
-        <button className="btn btn-block btn-sm mt-4 btn-outline" >Submit</button>
-      </div>
-    </form>)}
+        :
+
+        (
+          <div className="card bg-primary text-primary-content w-96">
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
+                <h2 className="text-3xl card-title justify-center"><span >Time to decide</span></h2>
+                <label className={`label text-white cursor-pointer ${vote === "Human" ? "selected" : ""}`}>
+                  <span className='label-text text-lg text-white'>Human</span>
+                  <input type="radio" name="human" className="radio bg-white" checked={vote === "Human"} onChange={() => handleCheckboxChange("Human")} />
+                </label>
+                <label className={`label cursor-pointer ${vote === "Bot" ? "selected" : ""}`}>
+                  <span className='label-text text-lg text-white'>Bot</span>
+                  <input type="radio" name="bot" checked={vote === "Bot"} onChange={() => handleCheckboxChange("Bot")} className="radio bg-white" />
+                </label>
+                <div className="card-actions justify-center">
+                  <button className="btn mt-4 w-full" >Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
     </div>
-    
+
   )
 }
 

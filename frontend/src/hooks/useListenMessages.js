@@ -6,14 +6,17 @@ import useMessages from '../zustand/useMessages'
 
 const useListenMessages = () => {
     const {socket} = useSocketContext();
-    const {messages, setMessages, setIsComplete} = useMessages();
+    const {messages, setMessages, setIsComplete, setConvId} = useMessages();
     const {conversation} = useConversationContext();
 
     useEffect(() => {
-        socket?.on("newMessage", (newMessage) => {
+        socket?.on("newMessage", (newMessage, convId) => {
+            if(convId){
+                setConvId(convId);
+            }
             setMessages([...messages,newMessage]);
-            console.log(messages.length);
-            if((messages.length + 1) >= 4){
+
+            if((messages.length + 1) >= 20){
                 setIsComplete(true);
             }
             if(newMessage.senderId === conversation.id){

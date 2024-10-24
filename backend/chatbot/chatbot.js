@@ -16,11 +16,12 @@ const sendBotMessage = async (message, socketID) => {
         return;
     }
     
-    let formattedMessages = [{ role: "system", content: "You are another random person someone is talking to for the first time. Please use incorrect grammar, misspellings and slang when appropriate.  Also, do not ask a question in every message and keep message length varied between short and long messages." }];
+    let formattedMessages = [{ role: "system", content: "You are another random person someone is talking to for the first time. Feel free to occasionally use incorrect grammar, misspellings and slang when appropriate.  Do not ask a question in every message and keep message length varied between short and long messages, preferring short messages." }];
 
     formattedMessages = formattedMessages.concat(conversationMessages.map((m) => ({
         role: m.senderId === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25" ? "assistant" : "user",
-        content: m.message
+        content: m.message,
+        max_tokens: 50
     })));
 
     const completion = await openai.chat.completions.create({
@@ -30,10 +31,7 @@ const sendBotMessage = async (message, socketID) => {
 
     const finalMessage = await sendToSupabase(message.receiverId, message.senderId, completion.choices[0].message.content);
 
-    const delay = getRandomInt(5);
-    setTimeout(() => {
-        io.to(socketID).emit("newMessage", finalMessage);
-    }, 1000*delay);
+    io.to(socketID).emit("newMessage", finalMessage);
 
 }
 

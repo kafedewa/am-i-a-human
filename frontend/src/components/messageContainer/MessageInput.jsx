@@ -17,8 +17,8 @@ const MessageInput = ({disabled}) => {
     <form className='w-full bottom-0 pb-4 pl-4 pr-4' onSubmit={handleSubmit}>
         <div className=' relative w-full'>
             <input type="text" 
-                className='border text-sm rounded-lg block w-full pr-10 p-2.5 text-black'
-                placeholder='Send a message'
+                className='input input-bordered input-primary text-sm block w-full pr-10 p-2.5 text-black'
+                placeholder='Type here...'
                 disabled={disabled}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}/>

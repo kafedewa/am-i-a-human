@@ -10,7 +10,7 @@ const LogoutButton = () => {
     <div className=''>
 
       {
-        !loading ? (<button className='w-6 h-6 text-black cursor-pointer' onClick={logout}><img src={icon}/></button>) : (<span className='loading loading-spinner'/>)
+        !loading ? (<div className="tooltip tooltip-bottom" data-tip="Logout"><button className='w-6 h-6 text-black cursor-pointer' onClick={logout}><img src={icon}/></button></div>) : (<span className='loading loading-spinner'/>)
       }
         
     </div>

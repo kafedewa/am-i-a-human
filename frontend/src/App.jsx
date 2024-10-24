@@ -10,12 +10,10 @@ import { Toaster } from 'react-hot-toast'
 import { useAuthContext } from './context/AuthContext'
 
 function App() {
-  const {authUser, loading} = useAuthContext();
+  const {authUser} = useAuthContext();
 
   return (
-    <>
-    {loading ? (<span className='loading loading-spinner'/>) : 
-      (<div className='h-screen flex items-center justify-center bg-white'>
+    <div className='h-screen flex items-center justify-center bg-white'>
 
         <Routes>
           <Route path='/' element={authUser ? <Home/> : <Navigate to="/welcome"/>}/>
@@ -26,9 +24,7 @@ function App() {
         </Routes>
         <Toaster/>
 
-      </div>)
-    }
-    </>
+      </div>
   )
 }
 

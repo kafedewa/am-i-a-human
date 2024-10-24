@@ -28,7 +28,7 @@ const Home = () => {
                 <span >Welcome, {authUser.fullName}!</span>
             </h1>
             <h3 className='text-lg text-center text-black mt-4'>
-                <span>Click below to chat with another. In 20 messages, your chat will be over and you will need to decide “Am I human?”</span>
+                <span>Click below to chat with another. In 20 messages, your chat will be over and you'll need to decide “Was that a person or a bot?”</span>
             </h3>
             {conversation && !isComplete ? (
                 <Link to='/chat'>

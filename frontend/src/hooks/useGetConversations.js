@@ -12,7 +12,7 @@ const useGetConversations = () => {
     const getConversations = async () => {
         setLoading(true);
         try {
-            const {data,error} = await supabase.from('conversations').select().contains('participants', [authUser.id]).order('created_at');
+            const {data,error} = await supabase.from('conversations').select().contains('participants', [authUser.id]).eq('isActive', 'FALSE').order('created_at');
 
             if(error){
                 throw new Error(error.message);

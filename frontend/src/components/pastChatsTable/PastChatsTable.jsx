@@ -6,17 +6,16 @@ const PastChatsTable = () => {
   const {loading, conversations} = useGetConversations();
 
   return (
-    <div>
-      {conversations.length > 0 ? (loading ? (<div></div>) : (
-        <div className='flex-col overflow-scroll'>
+    <div className='flex flex-col h-96'>
         <h1 className='text-3xl mt-10 text-center font-semibold text-black'>
-          <span >Past Votes</span>
+          <span >Past Chats</span>
         </h1>
-
-        <div className="mt-4 max-h-80 overflow-y-scroll">
+      
+        
+        <div className="mt-4 overflow-scroll">
         <table className="table">
           <thead>
-            <tr>
+            <tr className='text-black'>
               <th></th>
               <th>Date</th>
               <th>Completed</th>
@@ -24,6 +23,7 @@ const PastChatsTable = () => {
               <th>Reality</th>
             </tr>
           </thead>
+          {conversations.length > 0 ? (loading ? (<div></div>) : (
           <tbody>
             {
               conversations.map((conversation, idx) => (
@@ -35,12 +35,12 @@ const PastChatsTable = () => {
               ))
             }
           </tbody>
+                ))
+                : (<div></div>)}
         </table>
       </div>
+
       </div>
-      ))
-      : (<div></div>)}
-    </div>
   )
 }
 

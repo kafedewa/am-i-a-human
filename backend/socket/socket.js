@@ -17,7 +17,9 @@ const io = new Server(server, {
 
 const userSocketMap = {}; //(userID: socketID)
 
-const waitingUserSocketMap = {};
+const waitingUserSocketMap = {}; //(userID: socketID)
+
+const timeouts = {} //(userID : timeout)
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -36,11 +38,13 @@ io.on('connection', (socket) => {
         if(waitingUserSocketMap[userId]){
             delete waitingUserSocketMap[userId];
         }
+        if(timeouts[userId]){
+            delete timeouts[userId];
+        }
     });
 
     socket.on('startConversation', (authUserId) => {
-        const num = 2; // getRandomInt(3);
-
+        const num = getRandomInt(3);
         if(num === 2){
             const delay = getRandomInt(10);
             setTimeout(() => {
@@ -61,12 +65,22 @@ io.on('connection', (socket) => {
     });
 
     socket.on("newMessage", (message) => {
-        sendToSupabase(message.senderId, message.receiverId, message.message, (messageEntry) => {
-            io.to(userSocketMap[message.senderId]).emit("newMessage", messageEntry);
+        sendToSupabase(message.senderId, message.receiverId, message.message, (messageEntry, convId) => {
+            io.to(userSocketMap[message.senderId]).emit("newMessage", messageEntry, convId);
             if(message.receiverId === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25"){
-                sendBotMessage(message, userSocketMap[message.senderId]);
+                if(timeouts[message.senderId]){
+                    clearTimeout(timeouts[message.senderId]);
+                    delete timeouts[message.senderId];
+                }
+
+                const delay = getRandomInt(5);
+                const timeoutId = setTimeout(() => {
+                    sendBotMessage(message, userSocketMap[message.senderId]);
+                }, 1500*delay);
+
+                timeouts[message.senderId] = timeoutId;
             }else{
-                io.to(userSocketMap[message.receiverId]).emit("newMessage", messageEntry);
+                io.to(userSocketMap[message.receiverId]).emit("newMessage", messageEntry, convId);
             }
         });
     });
