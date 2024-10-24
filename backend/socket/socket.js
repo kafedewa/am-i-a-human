@@ -17,7 +17,7 @@ const io = new Server(server, {
 
 const userSocketMap = {}; //(userID: socketID)
 
-const waitingUserSocketMap = {}; //(userID: socketID)
+const waitingUsers= [];
 
 const timeouts = {} //(userID : timeout)
 
@@ -30,16 +30,36 @@ io.on('connection', (socket) => {
 
     const userId = socket.handshake.query.userId;
 
-    if(userId != "undefined") userSocketMap[userId] = socket.id;
+    if(userId != "undefined"){
+        if(userSocketMap[userId]){
+            console.log("user is already online");
+            userSocketMap[userId].push(socket.id);
+        } else{
+            console.log("new user");
+            userSocketMap[userId] = [socket.id];
+        }
+        
+    }
 
     socket.on("disconnect", ()=>{
         console.log("user disconnected", socket.id);
-        delete userSocketMap[userId];
-        if(waitingUserSocketMap[userId]){
-            delete waitingUserSocketMap[userId];
-        }
-        if(timeouts[userId]){
-            delete timeouts[userId];
+
+        if(userSocketMap[userId].length > 1){
+            const idxToRemove = userSocketMap[userId].indexOf(socket.id);
+            if(idxToRemove > -1){
+                userSocketMap[userId].splice(idxToRemove,1);
+            }
+        } else{
+            delete userSocketMap[userId];
+
+            const waitingUserToRemove = waitingUsers.indexOf(userId);
+            if(waitingUserToRemove > -1){
+                waitingUsers.splice(waitingUserToRemove, 1);
+            }
+
+            if(timeouts[userId]){
+                delete timeouts[userId];
+            }
         }
     });
 
@@ -48,25 +68,38 @@ io.on('connection', (socket) => {
         if(num === 2){
             const delay = getRandomInt(10);
             setTimeout(() => {
-                io.to(socket.id).emit("paired", {id: "6d9e71b3-7f1b-4b11-9807-48f4cc09de25", userType: "bot"});
+                for(let i = 0; i < userSocketMap[userId].length; i++){
+                    io.to(userSocketMap[userId][i]).emit("paired", {id: "6d9e71b3-7f1b-4b11-9807-48f4cc09de25", userType: "bot"});
+                }             
             }, 1000*delay);
         }
-        else if (Object.keys(waitingUserSocketMap).length != 0) {
+        else if (waitingUsers.length != 0 && waitingUsers[0] != userId) {
             // Pair the two users
-            const partnerId = Object.keys(waitingUserSocketMap)[0];;
-            io.to(socket.id).emit("paired", {id: partnerId, userType: "person"});
-            io.to(waitingUserSocketMap[partnerId]).emit("paired", {id: authUserId, userType: "person"});
-            delete waitingUserSocketMap[partnerId]; 
+            const partnerId = waitingUsers[0];
+
+            for(let i = 0; i < userSocketMap[userId].length; i++){
+                io.to(userSocketMap[userId][i]).emit("paired", {id: partnerId, userType: "person"});
+            }
+            for(let i = 0; i < userSocketMap[partnerId].length; i++){
+                io.to(userSocketMap[partnerId][i]).emit("paired", {id: authUserId, userType: "person"});
+            }
+
+            waitingUsers.shift(); 
           } else {
             // Set the current user as waiting
-            waitingUserSocketMap[authUserId] = socket.id;
-          }
+            if(waitingUsers.indexOf(userId) === -1){
+                waitingUsers.push(userId);
+             }
+        }
+            
 
     });
 
     socket.on("newMessage", (message) => {
         sendToSupabase(message.senderId, message.receiverId, message.message, (messageEntry, convId) => {
-            io.to(userSocketMap[message.senderId]).emit("newMessage", messageEntry, convId);
+            for(let i = 0; i < userSocketMap[message.senderId].length; i++){
+                io.to(userSocketMap[message.senderId][i]).emit("newMessage", messageEntry, convId);
+            }
             if(message.receiverId === "6d9e71b3-7f1b-4b11-9807-48f4cc09de25"){
                 if(timeouts[message.senderId]){
                     clearTimeout(timeouts[message.senderId]);
@@ -80,7 +113,9 @@ io.on('connection', (socket) => {
 
                 timeouts[message.senderId] = timeoutId;
             }else{
-                io.to(userSocketMap[message.receiverId]).emit("newMessage", messageEntry, convId);
+                for(let i = 0; i < userSocketMap[message.senderId].length; i++){
+                    io.to(userSocketMap[message.receiverId][i]).emit("newMessage", messageEntry, convId);
+                }
             }
         });
     });

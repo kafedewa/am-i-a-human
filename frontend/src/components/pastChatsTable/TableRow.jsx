@@ -6,8 +6,6 @@ const TableRow = ({conversation,idx}) => {
   const {authUser} = useAuthContext();
   const formattedDate = extractDate(conversation.created_at);
 
-  console.log(idx);
-
   return (
     <tr className='text-black'>
         <td>{formattedDate}</td>

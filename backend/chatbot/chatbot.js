@@ -31,7 +31,9 @@ const sendBotMessage = async (message, socketID) => {
 
     const finalMessage = await sendToSupabase(message.receiverId, message.senderId, completion.choices[0].message.content);
 
-    io.to(socketID).emit("newMessage", finalMessage);
+    for(let i = 0; i < socketID.length; i++){
+        io.to(socketID[i]).emit("newMessage", finalMessage);
+    }
 
 }
 

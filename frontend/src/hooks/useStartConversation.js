@@ -23,7 +23,6 @@ const useStartConversation = () => {
 
             socket.on("paired", (partner) => {
                 setConversation(partner);
-                console.log(`Paired with ${partner.id}`);
               });
             
         } catch (error) {
