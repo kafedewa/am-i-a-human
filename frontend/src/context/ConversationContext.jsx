@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 export const ConversationContext = createContext();
 
@@ -8,9 +8,8 @@ export const useConversationContext = () => {
 
 export const ConversationContextProvider = ({children}) => {
     const [conversation, setConversation] = useState(null);
-    const [loading, setLoading] = useState(false);
 
-    return <ConversationContext.Provider value={{ conversation, setConversation, loading }}>
+    return <ConversationContext.Provider value={{ conversation, setConversation }}>
         
         {children}
         

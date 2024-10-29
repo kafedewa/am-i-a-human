@@ -46,7 +46,7 @@ export const sendToSupabase = async (senderId, receiverId, messageContent, callb
 
         return data[0];
     } catch (error) {
-        console.log("error in sent to suberbase")
+        console.log("error in sent to supabase")
         console.log(error.message)
     }
 }

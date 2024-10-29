@@ -6,12 +6,11 @@ import { Link } from 'react-router-dom';
 const VotingContainer = () => {
   const [vote, setVote] = useState("Human");
   const [submitted, setSubmitted] = useState(false);
-  const { conversation, setConversation } = useConversationContext();
+  const { conversation } = useConversationContext();
   const { submitVote } = useVote();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(vote);
     submitVote(vote);
     setSubmitted(true);
   }

@@ -2,7 +2,6 @@ import OpenAI from "openai";
 import { io } from "../socket/socket.js";
 import dotenv from "dotenv"
 import { sendToSupabase, getMessages } from "../supabaseServer/supabaseServer.js";
-import getRandomInt from "../utils/getRandomInt.js";
 
 dotenv.config();
 
@@ -12,7 +11,7 @@ const sendBotMessage = async (message, socketID) => {
 
     const conversationMessages = await getMessages(message);
 
-    if(conversationMessages.length >= 20){
+    if(conversationMessages.length >= 20 || conversationMessages.length === 0){
         return;
     }
     

@@ -15,9 +15,11 @@ const io = new Server(server, {
 	},
 });
 
-const userSocketMap = {}; //(userID: socketID)
+const userSocketMap = {}; //(userID: [socketID])
 
 const waitingUsers= [];
+
+const activeConversations = {}; // (userID : {partnerID, userType})
 
 const timeouts = {} //(userID : timeout)
 
@@ -57,6 +59,10 @@ io.on('connection', (socket) => {
                 waitingUsers.splice(waitingUserToRemove, 1);
             }
 
+            if(activeConversations[userId]){
+                delete activeConversations[userId];
+            }
+
             if(timeouts[userId]){
                 delete timeouts[userId];
             }
@@ -65,9 +71,15 @@ io.on('connection', (socket) => {
 
     socket.on('startConversation', (authUserId) => {
         const num = getRandomInt(3);
-        if(num === 2){
+
+        if(activeConversations[authUserId]){
+            io.to(socket.id).emit("paired", activeConversations[authUserId]);
+            console.log("here", activeConversations[authUserId])
+        } 
+        else if(num === 2){
             const delay = getRandomInt(10);
             setTimeout(() => {
+                activeConversations[authUserId] =  {id: "6d9e71b3-7f1b-4b11-9807-48f4cc09de25", userType: "bot"};
                 for(let i = 0; i < userSocketMap[userId].length; i++){
                     io.to(userSocketMap[userId][i]).emit("paired", {id: "6d9e71b3-7f1b-4b11-9807-48f4cc09de25", userType: "bot"});
                 }             
@@ -76,6 +88,10 @@ io.on('connection', (socket) => {
         else if (waitingUsers.length != 0 && waitingUsers[0] != userId) {
             // Pair the two users
             const partnerId = waitingUsers[0];
+            waitingUsers.shift(); 
+
+            activeConversations[userId] =  {id: partnerId, userType: "person"};
+            activeConversations[partnerId] =  {id: authUserId, userType: "person"};
 
             for(let i = 0; i < userSocketMap[userId].length; i++){
                 io.to(userSocketMap[userId][i]).emit("paired", {id: partnerId, userType: "person"});
@@ -84,7 +100,6 @@ io.on('connection', (socket) => {
                 io.to(userSocketMap[partnerId][i]).emit("paired", {id: authUserId, userType: "person"});
             }
 
-            waitingUsers.shift(); 
           } else {
             // Set the current user as waiting
             if(waitingUsers.indexOf(userId) === -1){
@@ -92,7 +107,6 @@ io.on('connection', (socket) => {
              }
         }
             
-
     });
 
     socket.on("newMessage", (message) => {
@@ -113,12 +127,18 @@ io.on('connection', (socket) => {
 
                 timeouts[message.senderId] = timeoutId;
             }else{
-                for(let i = 0; i < userSocketMap[message.senderId].length; i++){
+                for(let i = 0; i < userSocketMap[message.receiverId].length; i++){
                     io.to(userSocketMap[message.receiverId][i]).emit("newMessage", messageEntry, convId);
                 }
             }
         });
     });
+
+    socket.on("endConversation", (authUserId) => {
+        if(activeConversations[authUserId]){
+            delete activeConversations[authUserId];
+        }
+    })
 });
 
 export {app,io,server};

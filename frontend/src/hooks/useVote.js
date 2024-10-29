@@ -1,7 +1,6 @@
 import React from 'react'
 import { useAuthContext } from '../context/AuthContext'
 import { supabase } from '../supabaseClient';
-import { useConversationContext } from '../context/ConversationContext';
 import useMessages from '../zustand/useMessages';
 
 const useVote = () => {
@@ -10,13 +9,10 @@ const useVote = () => {
 
     const submitVote = async (vote) => {
         try {
-            console.log("convid", convId)
-
             const {data, error} = await supabase.from('conversations').select('votes').eq('id', convId);
-            
-            console.log(data);
 
             if(error){
+                console.log("error in first get")
                 throw new Error(error);
             }
 
@@ -26,12 +22,10 @@ const useVote = () => {
             }
             newVotes[authUser.id] = vote;
 
-            console.log(newVotes);
-
             const {result} = await supabase.from('conversations').update({votes: newVotes}).eq('id', convId).select();
 
-            if(result.error){
-                throw new Error(error2);
+            if(result){
+                throw new Error(result.error);
             }
 
         } catch (error) {

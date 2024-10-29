@@ -1,28 +1,29 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import useMessages from '../zustand/useMessages'
 import { useConversationContext } from '../context/ConversationContext';
 import { supabase } from '../supabaseClient';
 import { useAuthContext } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import {useSocketContext} from '../context/SocketContext'
 
 const useEndConversation = () => {
     const {isComplete} = useMessages();
-    const {conversation, setConversation} = useConversationContext();
+    const {conversation} = useConversationContext();
     const {authUser} = useAuthContext();
-    const navigate = useNavigate();
+    const {socket} = useSocketContext();
 
     useEffect(() => {
         const endConversation = async () => {
             if(isComplete){
                 try{
-                    const { data, error } = await supabase
+                    const { error } = await supabase
                         .from('conversations')
                         .update({ completed: 'TRUE',
                             isActive: 'FALSE'
                         })
                         .contains('participants', [conversation.id, authUser.id])
-                        .eq('isActive', 'TRUE')
-                        .select();
+                        .eq('isActive', 'TRUE');
+
+                    socket.emit('endConversation', authUser.id);
 
                     if(error){
                         throw new Error(error);
