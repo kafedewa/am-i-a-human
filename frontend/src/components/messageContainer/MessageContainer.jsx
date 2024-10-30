@@ -13,7 +13,7 @@ const MessageContainer = () => {
   useEndConversation();
 
   return (
-    <div className='flex h-screen w-full pt-12 flex-col'>
+    <div className='flex h-dvh w-screen pt-12 flex-col'>
       <>
       <MessageCounter/>
       {isComplete ? (<VotingContainer/>) : ('')}

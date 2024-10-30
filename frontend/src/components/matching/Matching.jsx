@@ -2,7 +2,7 @@ import React from 'react'
 
 const Matching = () => {
   return (
-    <div className='flex h-screen w-full flex-col'>
+    <div className='flex h-dvh w-full flex-col'>
         <div className='flex flex-col h-full w-full justify-center items-center text-black'>
             <h1 className='text-3xl font-semibold'>
                 <span >Matching now...</span>

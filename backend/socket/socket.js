@@ -28,23 +28,20 @@ function sleep(ms) {
   }
 
 io.on('connection', (socket) => {
-    console.log("A user connected", socket.id)
+    console.log("A user connected", socket.id);
 
     const userId = socket.handshake.query.userId;
 
     if(userId != "undefined"){
         if(userSocketMap[userId]){
-            console.log("user is already online");
             userSocketMap[userId].push(socket.id);
         } else{
-            console.log("new user");
             userSocketMap[userId] = [socket.id];
         }
         
     }
 
     socket.on("disconnect", ()=>{
-        console.log("user disconnected", socket.id);
 
         if(userSocketMap[userId].length > 1){
             const idxToRemove = userSocketMap[userId].indexOf(socket.id);
@@ -74,7 +71,6 @@ io.on('connection', (socket) => {
 
         if(activeConversations[authUserId]){
             io.to(socket.id).emit("paired", activeConversations[authUserId]);
-            console.log("here", activeConversations[authUserId])
         } 
         else if(num === 2){
             const delay = getRandomInt(10);

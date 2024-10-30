@@ -13,8 +13,8 @@ const Chat = () => {
   const { conversation } = useConversationContext();
 
   return (
-    <div className="flex flex-col h-screen w-screen">
-      <div className="navbar flex fixed top-0 left-0 right-0">
+    <div className="flex flex-col h-dvh w-screen">
+      <div className="navbar flex fixed bg-white top-0 left-0 right-0">
         <h1 className="text-5xl font-semibold text-black flex-1 top-0 justify-center">Chat</h1>
         <div className="fixed top-6 right-6">
           <LogoutButton />

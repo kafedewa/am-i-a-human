@@ -9,10 +9,10 @@ const Welcome = () => {
   return (
     <div className='text-black'>
         <div className='flex flex-col items-center'>
-            <h1 className='text-8xl font-semibold text-center'>
+            <h1 className='text-8xl font-semibold text-center ml-4 mr-4'>
                 <span >Am I a Human?</span>
             </h1>
-            <h3 className='text-lg text-center mt-4'>
+            <h3 className='text-lg text-center mt-4 ml-4 mr-4'>
                 <span>Chat with another.  Decide if they are a human or a chatbot.</span>
             </h3>
             <Link to={authUser ? "/" : "/login"}>

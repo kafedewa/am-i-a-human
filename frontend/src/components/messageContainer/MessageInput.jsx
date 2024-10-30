@@ -17,7 +17,7 @@ const MessageInput = ({disabled}) => {
     <form className='w-full bottom-0 pb-4 pl-4 pr-4' onSubmit={handleSubmit}>
         <div className=' relative w-full'>
             <input type="text" 
-                className='input input-bordered input-primary text-sm block w-full pr-10 p-2.5 text-black'
+                className='input input-bordered input-primary block w-full pr-10 p-2.5 text-black'
                 placeholder='Type here...'
                 disabled={disabled}
                 value={message}
