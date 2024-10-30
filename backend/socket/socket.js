@@ -119,7 +119,7 @@ io.on('connection', (socket) => {
                 const delay = getRandomInt(5);
                 const timeoutId = setTimeout(() => {
                     sendBotMessage(message, userSocketMap[message.senderId]);
-                }, 1500*delay);
+                }, 1500*(delay + 2));
 
                 timeouts[message.senderId] = timeoutId;
             }else{
