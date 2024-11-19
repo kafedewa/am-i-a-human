@@ -101,6 +101,17 @@ io.on('connection', (socket) => {
             if(waitingUsers.indexOf(userId) === -1){
                 waitingUsers.push(userId);
              }
+
+            setTimeout(() => {
+                if(waitingUsers.indexOf(userId) > -1){
+                    waitingUsers.splice(waitingUsers.indexOf(userId), 1);
+                    activeConversations[authUserId] =  {id: "6d9e71b3-7f1b-4b11-9807-48f4cc09de25", userType: "bot"};
+                    for(let i = 0; i < userSocketMap[userId].length; i++){
+                        io.to(userSocketMap[userId][i]).emit("paired", {id: "6d9e71b3-7f1b-4b11-9807-48f4cc09de25", userType: "bot"});
+                    }
+                }
+            }, 30000);
+
         }
             
     });
